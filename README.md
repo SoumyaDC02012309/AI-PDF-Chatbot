@@ -17,5 +17,17 @@ conda install langchain langchain_community langchain_huggingface faiss-cpu pypd
 conda install huggingface_hub
 pip install streamlit
 
+```
+Or You Can Run the following command
+
+```bash
+conda create -n medical_ai_chatbot python=3.12
+conda install -r requirements.txt
+```
+
+## Use of .env file
+
+- Get your **GROQ API KEY** and **Huggingface Token** from the respective websites after logging in to the website 
+- Add the **GROQ API KEY** and **Huggingface Token** in the .env file
 
 
