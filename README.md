@@ -2,8 +2,8 @@
 
 ## Prerequisite: Install Anaconda Prompt and Pip
 Follow the official installation guides to set up Anaconda Prompt and Pip on your system:  
-[Install Anaconda Prompt Documentation]([https://www.anaconda.com/docs/getting-started/anaconda/install])
-[Install Pip Documentation]([https://pip.pypa.io/en/stable/installation/])
+[Install Anaconda Prompt Documentation][(https://www.anaconda.com/docs/getting-started/anaconda/install)]
+[Install Pip Documentation][(https://pip.pypa.io/en/stable/installation/)]
 ---
 
 ## Steps to Set Up the Environment
