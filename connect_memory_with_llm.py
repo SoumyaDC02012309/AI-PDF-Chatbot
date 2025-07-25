@@ -6,7 +6,6 @@ from langchain.chains import RetrievalQA
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
-## Uncomment the following files if you're not using pipenv as your virtual environment manager
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
@@ -14,20 +13,20 @@ load_dotenv(find_dotenv())
 # Step 1: Setup LLM (Mistral with HuggingFace)
 HF_TOKEN=os.environ.get("HF_TOKEN")
 HUGGINGFACE_REPO_ID="mistralai/Mistral-7B-Instruct-v0.3"
+
+# You can use the following model as well
 # HUGGINGFACE_REPO_ID="HuggingFaceH4/zephyr-7b-beta"
-# print(f"Using HuggingFace Repo ID: {HUGGINGFACE_REPO_ID}")
+
+print(f"Using HuggingFace Repo ID: {HUGGINGFACE_REPO_ID}")
 
 def load_llm(huggingface_repo_id):
     llm=HuggingFaceEndpoint(
         repo_id=huggingface_repo_id,
         temperature=0.5,
         task="conversational", 
-        # model_kwargs={"token":HF_TOKEN,
-        # model_kwargs={"max_length":"512"}
-        max_new_tokens=512,            # Use top-level argument
+        max_new_tokens=512, 
         huggingfacehub_api_token=HF_TOKEN  # Pass token here
     )
-    # return llm
     # Wrap the HuggingFaceEndpoint with ChatHuggingFace
     chat_model = ChatHuggingFace(llm=llm)
     return chat_model
@@ -58,7 +57,7 @@ db=FAISS.load_local(DB_FAISS_PATH, embedding_model, allow_dangerous_deserializat
 qa_chain=RetrievalQA.from_chain_type(
     llm=load_llm(HUGGINGFACE_REPO_ID),
     chain_type="stuff",
-    retriever=db.as_retriever(search_kwargs={'k':3}),
+    retriever=db.as_retriever(search_kwargs={'k':3}),  # Change the value of k as per your requirements of no. of top sources to be used
     return_source_documents=True,
     chain_type_kwargs={'prompt':set_custom_prompt(CUSTOM_PROMPT_TEMPLATE)}
 )
