@@ -9,8 +9,6 @@ from langchain_core.prompts import PromptTemplate
 from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
 from langchain_groq import ChatGroq
 
-
-## Uncomment the following files if you're not using pipenv as your virtual environment manager
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
@@ -27,30 +25,16 @@ def set_custom_prompt(custom_prompt_template):
     prompt=PromptTemplate(template=custom_prompt_template, input_variables=["context", "question"])
     return prompt
 
-
-# def load_llm(huggingface_repo_id, HF_TOKEN):
-#     llm=HuggingFaceEndpoint(
-#         repo_id=huggingface_repo_id,
-#         temperature=0.5,
-#         model_kwargs={"token":HF_TOKEN,
-#                       "max_length":"512"}
-#     )
-#     return llm
-
-HUGGINGFACE_REPO_ID="mistralai/Mistral-7B-Instruct-v0.3" # PAID
+HUGGINGFACE_REPO_ID="mistralai/Mistral-7B-Instruct-v0.3"     # Change the RepoID here if you are changing in the connect_memory_with_llm.py file
 HF_TOKEN=os.environ.get("HF_TOKEN")  
 
 def load_llm(huggingface_repo_id, HF_TOKEN):
     llm=HuggingFaceEndpoint(
         repo_id=huggingface_repo_id,
         temperature=0.5,
-        task="conversational", 
-        # model_kwargs={"token":HF_TOKEN,
-        # model_kwargs={"max_length":"512"}
-        max_new_tokens=512,            # Use top-level argument
+        max_new_tokens=512,
         huggingfacehub_api_token=HF_TOKEN  # Pass token here
     )
-    # return llm
     # Wrap the HuggingFaceEndpoint with ChatHuggingFace
     chat_model = ChatHuggingFace(llm=llm)
     return chat_model
@@ -80,9 +64,7 @@ def main():
                 Question: {question}
 
                 Start the answer directly. No small talk please.
-                """
-        
-        
+                """  
 
         #TODO: Create a Groq API key and add it to .env file
         
@@ -92,11 +74,6 @@ def main():
                 st.error("Failed to load the vector store")
 
             qa_chain = RetrievalQA.from_chain_type(
-                # llm=ChatGroq(
-                #     model_name="meta-llama/llama-4-maverick-17b-128e-instruct",  # free, fast Groq-hosted model
-                #     temperature=0.0,
-                #     groq_api_key=os.environ["GROQ_API_KEY"],
-                # ),
                 llm=load_llm(HUGGINGFACE_REPO_ID, HF_TOKEN=HF_TOKEN),
                 chain_type="stuff",
                 retriever=vectorstore.as_retriever(search_kwargs={'k':5}),
@@ -109,10 +86,7 @@ def main():
             result=response["result"]
             source_documents=response["source_documents"]
             result_to_show=result+"\nSource Docs:\n"+str(source_documents)
-            #response="Hi, I am MediBot!"
-            # st.chat_message('assistant').markdown(result_to_show)
             st.chat_message('assistant').markdown(result)
-            # st.session_state.messages.append({'role':'assistant', 'content': result_to_show})
             st.session_state.messages.append({'role':'assistant', 'content': result})
 
         except Exception as e:
