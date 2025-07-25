@@ -87,7 +87,7 @@ def main():
             source_documents=response["source_documents"]
             result_to_show=result+"\nSource Docs:\n"+str(source_documents)
             st.chat_message('assistant').markdown(result)
-            st.session_state.messages.append({'role':'assistant', 'content': result})
+            st.session_state.messages.append({'role':'assistant', 'content': result})     # Just change ['content': result] to ['content': result_to_show] to print the source documents in the chatbot output 
 
         except Exception as e:
             st.error(f"Error: {str(e)}")
